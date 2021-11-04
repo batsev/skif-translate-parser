@@ -19,6 +19,10 @@ public class Service
     public String translateMessage(String requestBody) throws IOException {
         String lang = getLang(requestBody);
 
+        return getTranslatedText(requestBody, lang);
+    }
+
+    private Properties getProperties(String lang) throws IOException {
         Properties properties = new Properties();
         PROP_FILE_NAME = lang + ".properties";
         InputStream inputStream  = getClass().getClassLoader().getResourceAsStream(PROP_FILE_NAME);
@@ -28,15 +32,13 @@ public class Service
         } else {
             throw new FileNotFoundException("property file '" + PROP_FILE_NAME + "' not found in the classpath");
         }
-
-        String translatedText = getTranslatedText(requestBody, properties);
-
-        return translatedText;
+        return properties;
     }
 
-    private String getTranslatedText(String textToTranslate, Properties properties) {
+    private String getTranslatedText(String textToTranslate, String lang) throws IOException {
+        Properties properties = getProperties(lang);
         Matcher translateMatcher = TRANSLATE_PATTERN.matcher(textToTranslate);
-        StringBuffer resultString = new StringBuffer();
+        StringBuilder resultString = new StringBuilder();
 
         while(translateMatcher.find()){
             String translateKey = translateMatcher.group(1);
