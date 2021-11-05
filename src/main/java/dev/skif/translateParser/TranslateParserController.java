@@ -1,11 +1,10 @@
 package dev.skif.translateParser;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
 
 @RestController
 public class TranslateParserController {
@@ -18,7 +17,7 @@ public class TranslateParserController {
     }
 
     @PostMapping("/translate")
-    public String translateMessage(@RequestBody String requestBody) throws IOException {
+    public ResponseEntity<Object> translateMessage(@RequestBody String requestBody) {
         return service.translateMessage(requestBody);
     }
 }
